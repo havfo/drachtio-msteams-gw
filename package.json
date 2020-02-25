@@ -1,10 +1,11 @@
 {
-	"name": "drachtio-msgw",
+	"name": "drachtio-msteams-gw",
 	"version": "1.0.0",
 	"description": "",
 	"main": "server.js",
 	"scripts": {
 		"start": "node server.js",
+		"debug": "DEBUG=drachtio-msteams-gw* NODE_ENV=development SIPTRACE=* node server.js",
 		"connect": "node connect.js"
 	},
 	"author": "Håvar Aambø Fosstveit <havar@fosstveit.net>",

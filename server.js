@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-process.title = 'drachtio-msgw';
+process.title = 'drachtio-msteams-gw';
 
 const config = require('config');
 const Srf = require('drachtio-srf');
