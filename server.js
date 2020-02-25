@@ -12,6 +12,7 @@ const RtpEngines = require('./lib/rtpengine/RtpEngines');
 const sipLogger = require('./lib/logging/sipLogger');
 const Logger = require('./lib/logging/Logger');
 const interactiveServer = require('./lib/utils/interactiveServer');
+const safeRun = require('./lib/utils/safeRun');
 
 /* eslint-disable no-console */
 console.log('- process.env.DEBUG:', process.env.DEBUG);
@@ -22,6 +23,7 @@ const logger = new Logger();
 
 let srf;
 
+let error;
 let rtpengines;
 let sources;
 let organizations;
@@ -34,13 +36,22 @@ async function run()
 	srf = new Srf();
 
 	logger.debug('run() | loading rtpengines');
-	rtpengines = await RtpEngines.create();
+	([ error, rtpengines ] = await safeRun(RtpEngines.create()));
+
+	if (error)
+		logger.error('run() | error loading rtpengines [error:"%o"]', error);
 
 	logger.debug('run() | loading sources');
-	sources = await Sources.create();
+	([ error, sources ] = await safeRun(Sources.create()));
 
-	logger.debug('run() | starting Organizations');
-	organizations = await Organizations.create({ srf });
+	if (error)
+		logger.error('run() | error loading sources [error:"%o"]', error);
+
+	logger.debug('run() | loading organizations');
+	([ error, organizations ] = await safeRun(Organizations.create({ srf })));
+
+	if (error)
+		logger.error('run() | error loading organizations [error:"%o"]', error);
 
 	logger.debug('run() | starting InviteHandler');
 	inviteHandler = new InviteHandler({ srf, rtpengines, organizations, sources });
@@ -64,7 +75,7 @@ async function run()
 
 async function runSrf()
 {
-	srf.on('connect', (error, hostport) =>
+	srf.on('connect', (err, hostport) =>
 	{
 		logger.debug('runSrf() | connected to a drachtio server [hostport: "%s"]', hostport);
 
@@ -72,9 +83,9 @@ async function runSrf()
 			organizations.startPinging();
 	});
 
-	srf.on('error', (error) =>
+	srf.on('error', (err) =>
 	{
-		logger.error('runSrf() | error connecting to drachtio server [error: "%s"]', error);
+		logger.error('runSrf() | error connecting to drachtio server [error: "%s"]', err);
 
 		if (organizations.pinging)
 			organizations.stopPinging();
