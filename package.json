@@ -1,0 +1,24 @@
+{
+	"name": "drachtio-msgw",
+	"version": "1.0.0",
+	"description": "",
+	"main": "server.js",
+	"scripts": {
+		"start": "node server.js",
+		"connect": "node connect.js"
+	},
+	"author": "Håvar Aambø Fosstveit <havar@fosstveit.net>",
+	"license": "ISC",
+	"dependencies": {
+		"colors": "^1.4.0",
+		"config": "^3.2.5",
+		"drachtio-sip": "^0.4.0",
+		"drachtio-srf": "^4.4.30",
+		"mysql": "^2.18.1",
+		"pidusage": "^2.0.18",
+		"rtpengine-client": "0.0.9"
+	},
+	"devDependencies": {
+		"eslint": "^6.8.0"
+	}
+}
