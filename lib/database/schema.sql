@@ -5,7 +5,7 @@ INSERT INTO organizations (domain) VALUES ('example.com');
 CREATE TABLE IF NOT EXISTS organizations (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	domain TEXT
-) ENGINE = InnoDB	;
+) ENGINE = InnoDB;
 
 /*
 This gives us a mapping for where to send calls based on types.
