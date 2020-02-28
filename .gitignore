@@ -11,3 +11,6 @@ node_modules/
 # config
 config/*
 !config/default.json
+
+# Development stuff
+.vscode
